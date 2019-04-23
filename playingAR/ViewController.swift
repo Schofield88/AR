@@ -1,0 +1,96 @@
+//
+//  ViewController.swift
+//  playingAR
+//
+//  Created by Luke Phyall on 22/04/2019.
+//  Copyright © 2019 Warlock's Fortress. All rights reserved.
+//
+
+import UIKit
+import SceneKit
+import ARKit
+
+class ViewController: UIViewController, ARSCNViewDelegate {
+
+    @IBOutlet var sceneView: ARSCNView!
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        // Set the view's delegate
+        sceneView.delegate = self
+        
+        // Show statistics such as fps and timing information
+        sceneView.showsStatistics = true
+        
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        // These next five lines set up the tracking images that the app is going to look for
+        
+        // Create a session configuration
+        let configuration = ARImageTrackingConfiguration()
+        
+        // Use an if let statement to check whether tracking images actually exist in the asset folder
+        if let imageToTrack = ARReferenceImage.referenceImages(inGroupNamed: "Targets", bundle: Bundle.main) {
+            
+            //Set our particular tracking image
+            configuration.trackingImages = imageToTrack
+            
+            //Set the number of detected images that will experience an onscreen AR asset simultaneously
+            configuration.maximumNumberOfTrackedImages = 1
+            
+            //Feedback to let you know the configuration succeeded
+            print("If you're seeing this, your tracking images have been successful found")
+            
+        }       
+
+        // Run the view's session
+        sceneView.session.run(configuration)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        // Pause the view's session
+        sceneView.session.pause()
+    }
+
+    // MARK: - ARSCNViewDelegate
+    
+    func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
+        
+        // Create a node
+        let node = SCNNode()
+        
+        //Use an if let to make sure the detected image actually is of type ARImageAnchor
+        //The anchor it's using is the reference image we've already supplied
+        if let imageAnchor = anchor as? ARImageAnchor {
+            
+            //Create a flat plane with the exact dimensions of the reference image
+            let plane = SCNPlane(width: imageAnchor.referenceImage.physicalSize.width, height: imageAnchor.referenceImage.physicalSize.height)
+            
+            //Set the transparency of our plane to mostly see-through
+            plane.firstMaterial?.diffuse.contents = UIColor(white: 1.0, alpha: 0.25)
+            
+            //Create a plane node using the newly-defined plane
+            let planeNode = SCNNode(geometry: plane)
+            
+            //Plane is created standing up off the anchor
+            //Rotate it 90 degrees around the X axis so that our plane lies flat on our reference image
+            planeNode.eulerAngles.x = -.pi/2
+            
+            //Stick our plane node onto the main node
+            node.addChildNode(planeNode)
+        
+            
+            
+        }
+        
+        return node
+    }
+
+}
