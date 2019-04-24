@@ -66,6 +66,18 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         // Create a node
         let node = SCNNode()
         
+        //Creates a cone to be used as a pointer
+        let cone = SCNCone(topRadius: 0.05, bottomRadius: 0.0, height: 0.1)
+        
+        //creates a skin for the cone with a colour and assigns it to the geometry
+        let material = SCNMaterial()
+        
+        material.diffuse.contents = UIColor.red
+
+        cone.materials = [material]
+        
+        sceneView.autoenablesDefaultLighting = true
+        
         //Use an if let to make sure the detected image actually is of type ARImageAnchor
         //The anchor it's using is the reference image we've already supplied
         if let imageAnchor = anchor as? ARImageAnchor {
@@ -85,6 +97,11 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             
             //Stick our plane node onto the main node
             node.addChildNode(planeNode)
+            
+            node.geometry = cone
+            
+            
+         
         
             
             

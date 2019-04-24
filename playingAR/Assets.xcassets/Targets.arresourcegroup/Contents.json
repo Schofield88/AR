@@ -5,7 +5,16 @@
   },
   "resources" : [
     {
-      "filename" : "testTarget.arreferenceimage"
+      "filename" : "box_720.arreferenceimage"
+    },
+    {
+      "filename" : "large_target.arreferenceimage"
+    },
+    {
+      "filename" : "makerscard.arreferenceimage"
+    },
+    {
+      "filename" : "postcard_720.arreferenceimage"
     }
   ]
 }
