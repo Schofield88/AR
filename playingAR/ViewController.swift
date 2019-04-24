@@ -23,7 +23,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         // Show statistics such as fps and timing information
         sceneView.showsStatistics = true
         
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -99,11 +98,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             node.addChildNode(planeNode)
             
             node.geometry = cone
-            
-            
          
         
-            
             
         }
         
